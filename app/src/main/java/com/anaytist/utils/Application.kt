@@ -8,28 +8,42 @@ import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 import java.util.HashMap
 
-val appsflyer = AppsFlyerLib.getInstance()
-val LOG_TAG = "Ana Log"
+var appsflyer = AppsFlyerLib.getInstance()
+var LOG_TAG = "Ana Log"
+var appFlyerKey = ""
+var tools = arrayOf<String>()
+
+fun AppsFlyerAnalyticsProvider(instance: Context, afDevKey: String, isDebug: Boolean): String {
+    // For debug - remove in production
+    // For debug - remove in production
+    appsflyer.setDebugLog(isDebug)
+
+    appsflyer.init(afDevKey, null, instance)
+
+    appFlyerKey = afDevKey
+
+    return "appFlyer"
+}
 
 object TDHAnalytics {
-    fun use(instance: Context, afDevKey: String, isDebug: Boolean) {
-        // For debug - remove in production
-        // For debug - remove in production
-        appsflyer.setDebugLog(isDebug)
+    fun use(tool: String) {
+        tools.set(0, tool);
+    }
 
-        appsflyer.init(afDevKey, null, instance)
+    fun start(instance: Context) {
+        if (tools[0] === "appFlyer") {
+            appsflyer.start(instance, appFlyerKey, object : AppsFlyerRequestListener {
+                override fun onSuccess() {
+                    Log.d(LOG_TAG, "Launch sent successfully woi")
+                }
 
-        appsflyer.start(instance, afDevKey, object : AppsFlyerRequestListener {
-            override fun onSuccess() {
-                Log.d(LOG_TAG, "Launch sent successfully woi")
-            }
-
-            override fun onError(errorCode: Int, errorDesc: String) {
-                Log.d(LOG_TAG, "Launch failed to be sent:\n" +
-                        "Error code: " + errorCode + "\n"
-                        + "Error description: " + errorDesc)
-            }
-        });
+                override fun onError(errorCode: Int, errorDesc: String) {
+                    Log.d(LOG_TAG, "Launch failed to be sent:\n" +
+                            "Error code: " + errorCode + "\n"
+                            + "Error description: " + errorDesc)
+                }
+            });
+        }
     }
 
     fun logEvent(instance: Context) {
