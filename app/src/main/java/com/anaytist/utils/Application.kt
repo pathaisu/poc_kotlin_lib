@@ -27,11 +27,12 @@ fun AppsFlyerAnalyticsProvider(instance: Context, afDevKey: String, isDebug: Boo
 
 object TDHAnalytics {
     fun use(tool: String) {
-        tools.set(0, tool);
+        Log.d(LOG_TAG, "Platform $tool")
+//        tools.set(0, tool);
     }
 
     fun start(instance: Context) {
-        if (tools[0] === "appFlyer") {
+//        if (tools[0] === "appFlyer") {
             appsflyer.start(instance, appFlyerKey, object : AppsFlyerRequestListener {
                 override fun onSuccess() {
                     Log.d(LOG_TAG, "Launch sent successfully woi")
@@ -43,7 +44,7 @@ object TDHAnalytics {
                             + "Error description: " + errorDesc)
                 }
             });
-        }
+//        }
     }
 
     fun logEvent(instance: Context) {
