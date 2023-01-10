@@ -1,18 +1,24 @@
 package com.anaytist.utils
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
+import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.HashMap
+
 
 var appsflyer = AppsFlyerLib.getInstance()
 var LOG_TAG = "Ana Log"
 var appFlyerKey = ""
 var tools = ArrayList<String>()
 var instance: Context? = null
+var sessionParameters = HashMap<String, Any>()
+
+var firebaseInstance: FirebaseAnalytics? = null
 
 fun AppsFlyerAnalyticsProvider(context: Context, afDevKey: String, isDebug: Boolean): String {
     // For debug - remove in production
@@ -28,10 +34,20 @@ fun AppsFlyerAnalyticsProvider(context: Context, afDevKey: String, isDebug: Bool
     return "appFlyer"
 }
 
+fun FirebaseAnalyticsProvider(firebaseContext: FirebaseAnalytics): String {
+    firebaseInstance = firebaseContext
+
+    return "firebase"
+}
+
 object TDHAnalytics {
     fun use(tool: String) {
         Log.d(LOG_TAG, "Platform $tool")
         tools.add(tool)
+    }
+
+    fun addSessionParameter(params: HashMap<String, Any>) {
+        sessionParameters = params
     }
 
     fun start() {
@@ -53,25 +69,39 @@ object TDHAnalytics {
     }
 
     fun logEvent(eventName: String, eventValues: HashMap<String, Any>) {
-//        val eventValues = HashMap<String, Any>()
-//        eventValues.put(AFInAppEventParameterName.PRICE, 1234.56)
-//        eventValues.put(AFInAppEventParameterName.CONTENT_ID,"1234567")
+        // val eventValues = HashMap<String, Any>()
+        // eventValues.put(AFInAppEventParameterName.PRICE, 1234.56)
+        // eventValues.put(AFInAppEventParameterName.CONTENT_ID,"1234567")
 
-        instance?.let {
-            appsflyer.logEvent(
-                it,
-                eventName , eventValues, object : AppsFlyerRequestListener {
-                    override fun onSuccess() {
-                        Log.d(LOG_TAG, "$eventName $eventValues")
-                        Log.d(LOG_TAG, "Event sent successfully wa")
-                    }
+        if (tools.contains("appFlyer")) {
+            instance?.let {
+                appsflyer.logEvent(
+                    it,
+                    eventName, eventValues, object : AppsFlyerRequestListener {
+                        override fun onSuccess() {
+                            Log.d(LOG_TAG, "$eventName $eventValues")
+                            Log.d(LOG_TAG, "Event sent successfully wa")
+                        }
 
-                    override fun onError(errorCode: Int, errorDesc: String) {
-                        Log.d(LOG_TAG, "Event failed to be sent:\n" +
-                                "Error code: " + errorCode + "\n"
-                                + "Error description: " + errorDesc)
-                    }
-                })
+                        override fun onError(errorCode: Int, errorDesc: String) {
+                            Log.d(
+                                LOG_TAG, "Event failed to be sent:\n" +
+                                        "Error code: " + errorCode + "\n"
+                                        + "Error description: " + errorDesc
+                            )
+                        }
+                    })
+            }
+        }
+
+        if (tools.contains("firebase")) {
+            val bundle = Bundle()
+
+            bundle.putString("show_name", "test value")
+
+            firebaseInstance?.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
+
+            Log.d("Ana Logger", "Fireeeeeee baseeeeeee firerrrr")
         }
 
         Log.d("Ana Logger", "---- > > > new ver na")
