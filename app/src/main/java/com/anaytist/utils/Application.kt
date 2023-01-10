@@ -52,15 +52,15 @@ object TDHAnalytics {
         }
     }
 
-    fun logEvent() {
-        val eventValues = HashMap<String, Any>()
-        eventValues.put(AFInAppEventParameterName.PRICE, 1234.56)
-        eventValues.put(AFInAppEventParameterName.CONTENT_ID,"1234567")
+    fun logEvent(eventName: String, eventValues: HashMap<String, Any>) {
+//        val eventValues = HashMap<String, Any>()
+//        eventValues.put(AFInAppEventParameterName.PRICE, 1234.56)
+//        eventValues.put(AFInAppEventParameterName.CONTENT_ID,"1234567")
 
         instance?.let {
             appsflyer.logEvent(
                 it,
-                AFInAppEventType.ADD_TO_CART , eventValues, object : AppsFlyerRequestListener {
+                eventName , eventValues, object : AppsFlyerRequestListener {
                     override fun onSuccess() {
                         Log.d(LOG_TAG, "Event sent successfully wa")
                     }
