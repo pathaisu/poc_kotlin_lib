@@ -62,6 +62,7 @@ object TDHAnalytics {
                 it,
                 eventName , eventValues, object : AppsFlyerRequestListener {
                     override fun onSuccess() {
+                        Log.d(LOG_TAG, "$eventName $eventValues")
                         Log.d(LOG_TAG, "Event sent successfully wa")
                     }
 
