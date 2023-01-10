@@ -11,7 +11,7 @@ import java.util.HashMap
 var appsflyer = AppsFlyerLib.getInstance()
 var LOG_TAG = "Ana Log"
 var appFlyerKey = ""
-var tools = arrayOf<String>()
+var tools = ArrayList<String>()
 var instance: Context? = null
 
 fun AppsFlyerAnalyticsProvider(context: Context, afDevKey: String, isDebug: Boolean): String {
@@ -31,7 +31,7 @@ fun AppsFlyerAnalyticsProvider(context: Context, afDevKey: String, isDebug: Bool
 object TDHAnalytics {
     fun use(tool: String) {
         Log.d(LOG_TAG, "Platform $tool")
-        tools.plus(tool)
+        tools.add(tool)
     }
 
     fun start() {
