@@ -1,10 +1,8 @@
-package com.anaytist.utils
+package com.tdhanalytics.utils
 
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import com.appsflyer.AFInAppEventParameterName
-import com.appsflyer.AFInAppEventType
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.google.firebase.analytics.FirebaseAnalytics

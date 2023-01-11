@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.anaytist.utils'
+    namespace 'com.tdhanalytics.utils'
     compileSdk 32
 
     defaultConfig {
