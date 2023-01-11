@@ -67,13 +67,15 @@ class FirebaseAnalyticsProvider(firebaseContext: FirebaseAnalytics): AnalyticsPr
     override fun start() {}
 
     override fun logEvent(eventName: String, eventValues: HashMap<String, Any>) {
-        val bundle = Bundle()
+        val eventBundle = Bundle()
 
-        bundle.putString("show_name", "test value")
+        eventValues.forEach {
+            (k, v) -> eventBundle.putString(k, v.toString())
+        }
 
-        firebaseContext.logEvent(eventName, bundle)
+        firebaseContext.logEvent(eventName, eventBundle)
 
-        Log.d(LOG_TAG, "$eventName $bundle")
+        Log.d(LOG_TAG, "$eventName $eventBundle")
     }
 }
 
