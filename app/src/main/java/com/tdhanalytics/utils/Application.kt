@@ -19,7 +19,6 @@ interface AnalyticsProvider {
 class AppsFlyerAnalyticsProviders (context: Context, afDevKey: String, isDebug: Boolean): AnalyticsProvider {
     var context: Context = context
     var afDevKey = afDevKey
-    var isDebug = isDebug
     var appsflyer = AppsFlyerLib.getInstance()
 
     init {
@@ -63,19 +62,23 @@ class AppsFlyerAnalyticsProviders (context: Context, afDevKey: String, isDebug: 
 }
 
 class FirebaseAnalyticsProvider(firebaseContext: FirebaseAnalytics): AnalyticsProvider {
-    override fun start() {
-        TODO("Not yet implemented")
-    }
+    var firebaseContext = firebaseContext
+
+    override fun start() {}
 
     override fun logEvent(eventName: String, eventValues: HashMap<String, Any>) {
-        TODO("Not yet implemented")
-    }
+        val bundle = Bundle()
 
+        bundle.putString("show_name", "test value")
+
+        firebaseContext.logEvent(eventName, bundle)
+
+        Log.d(LOG_TAG, "$eventName $bundle")
+    }
 }
 
 object TDHAnalytics {
     fun use(analytic: AnalyticsProvider) {
-        Log.d(LOG_TAG, "Platform")
         analyticsApp.add(analytic)
     }
 
