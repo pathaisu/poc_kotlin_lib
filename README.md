@@ -22,13 +22,13 @@ Android library to handle various type of analytics such as `AppFlyer` and `Fire
 How to use
 ----
 
-step 1: initiate analytics session.
+step 1: initiate AppFlyer session.
 
 ```kt
 // MainApplication.ts
 
-import com.anaytist.utils.TDHAnalytics
-import com.anaytist.utils.AppsFlyerAnalyticsProvider
+import com.tdhanalytics.utils.TDHAnalytics
+import com.tdhanalytics.utils.AppsFlyerAnalyticsProvider
 
 class MainApplication : Application() {
   ...
@@ -43,19 +43,36 @@ class MainApplication : Application() {
 
 ```
 
-step 2: star event logging.
+step 2: append Firebase instance to library.
 
 ```kt
 // AnalyticsMangerImpl.kt
 
-import com.anaytist.utils.TDHAnalytics
+import com.tdhanalytics.utils.TDHAnalytics
 
 class AnalyticsManagerImpl : AnalyticsManager {
-    private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
+  private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
-    override fun init(context: Context) {
-      ...
-      TDHAnalytics.use(FirebaseAnalyticsProvider(firebaseAnalytics))
-    }
+  override fun init(context: Context) {
+    ...
+    TDHAnalytics.use(FirebaseAnalyticsProvider(firebaseAnalytics))
+  }
+}
+```
+
+step 3: start event logging.
+
+```kt
+import com.tdhanalytics.utils.TDHAnalytics
+
+class SomeClass () {
+   override fun setupView() {
+    val eventName = "Test_Analytic";
+    val eventValues = HashMap<String, Any>()
+
+    eventValues.put("Price", 1234.56)
+    eventValues.put("Content_ID","1234567")
+
+    TDHAnalytics.logEvent(eventName, eventValues)
 }
 ```
