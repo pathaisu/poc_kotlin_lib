@@ -1,4 +1,4 @@
-package com.tdhanalytics.utils
+package com.tdhanalytics.sdk
 
 import android.content.Context
 import android.os.Bundle

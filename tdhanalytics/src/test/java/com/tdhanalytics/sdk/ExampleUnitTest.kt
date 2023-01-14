@@ -1,4 +1,4 @@
-package com.anaytist.utils
+package com.tdhanalytics.sdk
 
 import org.junit.Test
 
